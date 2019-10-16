@@ -12,7 +12,7 @@ int CppSonic::auth(const std::string& address, const std::string& username, cons
     t = token;
     parameters.AddParameter({"u", u});
     parameters.AddParameter({"p", t});
-    cpr::Response r = cpr::Get(cpr::Url{addr + ping}, parameters);
+    cpr::Response r = cpr::Get(cpr::Url{addr + ping_path}, parameters);
     tinyxml2::XMLDocument doc;
     doc.Parse(r.text.c_str());
     tinyxml2::XMLNode *rootnode = doc.FirstChild();
