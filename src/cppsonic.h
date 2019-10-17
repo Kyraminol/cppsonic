@@ -3,6 +3,7 @@
 
 #include <string>
 #include "cpr/cpr.h"
+#include "tinyxml2/tinyxml2.h"
 
 class CppSonic {
     public:
@@ -18,6 +19,8 @@ class CppSonic {
         const std::string main_path = "rest/";
         const std::string ping_path = main_path + "ping";
         const std::string indexes_path = main_path + "getIndexes";
+
+        int request(const std::string& path, const cpr::Parameters& params, tinyxml2::XMLDocument &doc);
 };
 
 #endif //CPPSONIC_H
