@@ -8,19 +8,22 @@
 class CppSonic {
     public:
          CppSonic();
-         int auth(const std::string& address, const std::string& username, const std::string& token);
+         int init(const std::string& address, const std::string& username, const std::string& password, const std::string& path="rest/", bool debug=false);
+         int init(const std::string& address, const std::string& username, const std::string& password, bool debug=false);
+         int ping();
+
          const std::string api_version = "1.16.1";
     private:
-        std::string addr;
+        std::string base_address;
+        std::string base_path = "rest/";
         std::string u;
-        std::string t;
-        cpr::Parameters parameters = cpr::Parameters{{"v", api_version}, {"c", "cppsonic"}};
-
-        const std::string main_path = "rest/";
-        const std::string ping_path = main_path + "ping";
-        const std::string indexes_path = main_path + "getIndexes";
+        std::string p;
+        cpr::Parameters base_parameters = cpr::Parameters{{"v", api_version}, {"c", "cppsonic"}};
+        bool debug_mode = false;
 
         int request(const std::string& path, const cpr::Parameters& params, tinyxml2::XMLDocument &doc);
+
+        void debug_print(const std::string& to_print);
 };
 
 #endif //CPPSONIC_H

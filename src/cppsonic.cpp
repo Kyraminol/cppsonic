@@ -3,25 +3,40 @@
 #include "cpr/cpr.h"
 #include "tinyxml2/tinyxml2.h"
 
+
+// Public interface
 CppSonic::CppSonic() = default;
 
-
-int CppSonic::auth(const std::string& address, const std::string& username, const std::string& token) {
+int CppSonic::init(const std::string& address, const std::string& username, const std::string& password, const std::string& path, bool debug){
     // Assign to class global variables
-    addr = address;
+    base_address = address;
     u = username;
-    t = token;
+    p = password;
+    if(debug) debug_mode = debug;
     // Try credentials with ping
-    tinyxml2::XMLDocument doc;
-    int result = request(ping_path, parameters, doc);
+    int result = ping();
     return result;
 }
 
-int CppSonic::request(const std::string& request_path, const cpr::Parameters& request_parameters, tinyxml2::XMLDocument& doc){
-    cpr::Parameters p = request_parameters;
-    p.AddParameter({"u", u});
-    p.AddParameter({"p", t});
-    cpr::Response r = cpr::Get(cpr::Url{addr + request_path}, p);
+int CppSonic::init(const std::string &address, const std::string &username, const std::string &password, bool debug) {
+    return init(address, username, password, "rest/", debug);
+}
+
+int CppSonic::ping() {
+    std::string endpoint = "ping";
+    tinyxml2::XMLDocument doc;
+    int result = request(endpoint, base_parameters, doc);
+    return result;
+}
+
+
+// Private interface
+int CppSonic::request(const std::string& endpoint, const cpr::Parameters& parameters, tinyxml2::XMLDocument& doc){
+    cpr::Parameters request_parameters = parameters;
+    request_parameters.AddParameter({"u", u});
+    request_parameters.AddParameter({"p", p});
+    cpr::Response r = cpr::Get(cpr::Url{base_address + base_path + endpoint}, request_parameters);
+    debug_print(r.url);
     doc.Parse(r.text.c_str());
     tinyxml2::XMLElement *first_element = doc.FirstChildElement();
     if(first_element == nullptr) return -1;
@@ -34,4 +49,6 @@ int CppSonic::request(const std::string& request_path, const cpr::Parameters& re
     };
 }
 
-
+void CppSonic::debug_print(const std::string &to_print) {
+    if(debug_mode) std::cout << "[Debug] " << to_print << std::endl;
+}
