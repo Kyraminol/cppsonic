@@ -7,19 +7,18 @@
 // Public interface
 CppSonic::CppSonic() = default;
 
-int CppSonic::init(const std::string& address, const std::string& username, const std::string& password, const std::string& path, bool debug){
+int CppSonic::init(const std::string& address, const std::string& username, const std::string& password, const std::string& path){
     // Assign to class global variables
     base_address = address;
     u = username;
     p = password;
-    if(debug) debug_mode = debug;
     // Try credentials with ping
     int result = ping();
     return result;
 }
 
-int CppSonic::init(const std::string &address, const std::string &username, const std::string &password, bool debug) {
-    return init(address, username, password, "rest/", debug);
+void CppSonic::set_debug(bool debug){
+    debug_mode = debug;
 }
 
 int CppSonic::ping() {

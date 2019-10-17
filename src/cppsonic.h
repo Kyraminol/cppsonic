@@ -7,12 +7,15 @@
 
 class CppSonic {
     public:
-         CppSonic();
-         int init(const std::string& address, const std::string& username, const std::string& password, const std::string& path="rest/", bool debug=false);
-         int init(const std::string& address, const std::string& username, const std::string& password, bool debug=false);
-         int ping();
+        CppSonic();
+        int init(const std::string& address, const std::string& username, const std::string& password, const std::string& path="rest/");
 
-         const std::string api_version = "1.16.1";
+        int ping();
+
+
+        void set_debug(bool debug);
+
+        const std::string api_version = "1.16.1";
     private:
         std::string base_address;
         std::string base_path = "rest/";
